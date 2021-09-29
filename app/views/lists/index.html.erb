@@ -1,0 +1,47 @@
+<h1>To Do List</h1>
+
+<table class="table table-bordered">
+
+  <tbody>
+    <% @lists.each do |list| %>
+    <tr style="text-align: center;">
+      <th>Item</th>
+      <th>Status</th>
+      <th>Delete</th>
+    </tr>
+    
+    <% if list.completed %>
+        <tr style="float: center;" class="table-secondary">
+          <td class="completed_item"><%= link_to list.description, edit_list_path(list) %></td>
+          <td>
+            <%= form_for(list) do |f| %>
+            <%= f.text_field :description, type: "hidden" %>
+            <%= f.check_box :completed, :checked => false, :style => "visibility: hidden" %>
+            <%= f.submit "Uncomplete", class: "btn btn-outline-secondary btn-sm" %>
+            <% end %>
+          </td>
+          <td><%= link_to 'Delete', list, class: "btn btn-outline-danger btn-small", method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+        
+    <% else %>
+      <tr>
+        <td><%= link_to list.description, edit_list_path(list) %></td>
+        <td>
+          <%= form_for(list) do |f| %>
+          <%= f.text_field :description, type: "hidden" %>
+          <%= f.check_box :completed, :checked => true, :style => "visibility: hidden" %>
+          <%= f.submit "Complete", class: "btn btn-outline-secondary btn-sm" %>
+          <% end %>
+        </td>
+        <td><%= link_to 'Delete', list, class: "btn btn-outline-danger btn-small", method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New List', new_list_path %>
+<%= link_to 'Delete completed', home_delete_completed_path, data: { confirm: 'Are you sure you want to delete all completed items?' } %>
+<%= link_to 'Delete All', home_delete_all_path, data: { confirm: 'Are you sure you want to complete all items?' } %>
